@@ -4,12 +4,16 @@
 #include <stdio.h>
 
 Grafo iniciaGrafo(int vertices) {
-    Grafo novo; //(Grafo*)malloc(sizeof(Grafo));
-    novo.vertices = (Vert*) malloc (sizeof(Vert)*vertices);
+    int i=1;
+    Grafo novo;
+    if (vertices<1000){
+        i=2;
+    }
+    novo.vertices = (Vert*) malloc (sizeof(Vert) * vertices* i);
     for (int i=0;i < vertices+1 ; i++){
         addVert(&novo,i);
     }
-    novo.n=vertices;
+    novo.n = vertices;
     return novo;
 }
 void addVert(Grafo* grafo,int rotulo){
@@ -21,7 +25,7 @@ void addVert(Grafo* grafo,int rotulo){
 
 }
 void imprime(Grafo* a){
-    for(int i=0; i<a->n+1;i++){
+    for(int i=1; i< a->n+1;i++){
         printf("%d\t",a->vertices[i].rotulo);
         Adja* aux= a->vertices[i].adjacentes;
         while(aux!=NULL){
@@ -33,7 +37,6 @@ void imprime(Grafo* a){
     }
 }
 Adja* addAdja(Adja* adjacen,int peso,int v2){
-    Adja teste;
     Adja* novo = (Adja*) malloc(sizeof(Adja));
     
     novo->peso=peso;  
@@ -43,7 +46,6 @@ Adja* addAdja(Adja* adjacen,int peso,int v2){
     return novo;
 }
 void addAres(Grafo* grafo, int peso,int v1, int v2){
-           
             grafo->vertices[v1].adjacentes=addAdja(grafo->vertices[v1].adjacentes,peso,v2);
             grafo->vertices[v1].grau++;
             //grafo->vertices[v2].adjacentes=addAdja(grafo->vertices[v2].adjacentes,peso,v1);  

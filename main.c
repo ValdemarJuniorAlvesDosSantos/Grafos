@@ -57,31 +57,110 @@ Grafo ReadData(char* arq)
     return grafo;
 }
 
-int main(int argc, char** argv) {
+void FloydCanonica(int** matriz, int n, int** pred){
+	for(int k = 1; k < n; k++){
+		for(int i = 1; i < n; i++){
+			for(int j = 1; j< n; j++){                            
+				if( matriz[i][j] > (matriz[i][k] + matriz[k][j]) ){
+					matriz[i][j] = matriz[i][k] + matriz[k][j];                                        
+                                        pred[i][j] = k;
+                                }
+  			}
+		}
+	}
+}
+
+void imprimeCaminho(int** pred,int origem ,int destino,int n){
+    //printf("%d->",&origem);
+    int i=destino;
+    int a=0;
+    int cam[n];
+    cam[0]=destino;
     
+    while (i!=0){
+        i = pred[origem][i];
+        a++;
+        cam[a]=i;
+    }
+    printf("Caminho: %d",origem);
+    while (a != 0){
+        a--;
+        printf(" -> %d",cam[a]);
+    }
+}
+int main(int argc, char** argv) {
+
     FILE* arquivo();
-    Grafo g = ReadData("Teste.txt");
+    Grafo g = ReadData("Teste.txt"); 
     imprime(&g);
-    //printf("%d\n",g.n);
-//    int **a=(int**)malloc(sizeof(int*)*g.n);
-//    for (int i=0;i<g.n+1;i++){
-//        a[i]=(int*)malloc(sizeof(int)*g.n);
-//    }
-//    printf("true da true");
-//    for (int i=1;i<g.n+1;i++){
-//        for (int k=1;k<g.n+1;k++){          
-//            a[i][k] = custo(&g,i,k);
-//             if (a[i][k] != 200000){
-//                printf("%d %d custo :%d",i,k,a[i][k]);
-//             }
-//        }       
-//        printf("\n \t");
-//   }
-//    
-//    for (int i=1;i<g.n+1;i++){
-//        free(a[i]);
-//    }
-//    free(a);
+
+    int **a=(int**)malloc(sizeof(int*) * g.n+1);
+    
+    for (int i=0;i<g.n+1;i++){
+        a[i]=(int*)malloc(sizeof(int) * g.n+1);
+    }
+    
+    int **pred=(int**)malloc(sizeof(int*) * g.n+1);
+    
+    for (int i=0;i<g.n+1;i++){
+        pred[i]=(int*)malloc(sizeof(int) * g.n+1);
+    }
+    
+    printf("true da true");
+    for (int i=1;i<g.n+1;i++){
+        
+        for (int k=1;k<g.n+1;k++){          
+            a[i][k] = custo(&g,i,k);
+            printf ("de %d para %d custo %d \n" ,i,k,a[i][k]);
+        }       
+        printf("\n");
+    }
+    
+    for (int i=1;i<g.n+1;i++){
+        
+        for (int k=1;k<g.n+1;k++){
+            if (k==i){
+                pred[i][k] = i;
+            }else{
+                pred[i][k] = 0;
+            }
+        }       
+     
+    }
+    
+    
+    
+    FloydCanonica(a,g.n+1,pred);
+    
+    printf("Depois do algoritmo\n");
+    for (int i=1;i<g.n+1;i++){
+        
+        for (int k=1;k<g.n+1;k++){                   
+            printf ("de %d para %d custo %d \n" ,i,k,a[i][k]);
+        }       
+        printf("\n");
+    }
+    
+    //printf("Caminho 1 para 6");
+    for (int i=1;i<g.n+1;i++){
+        for (int j=1;j<g.n+1;j++){
+            printf(" -> %d",pred[i][j]);
+        }
+        printf("\n");
+    }
+    
+    for (int i=1;i<g.n+1;i++){
+         free(a[i]);
+    }
+    free(a);
+    imprimeCaminho(pred,1,5,9);
+    
+    for (int i=1;i<g.n+1;i++){
+         free(pred[i]);
+    }
+    free(pred);
+    
     return (EXIT_SUCCESS);
 }
+
 
