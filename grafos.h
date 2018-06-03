@@ -1,4 +1,5 @@
 typedef struct adjacencias Adja;
+
 struct adjacencias{
     int peso;
     int v2;
@@ -8,6 +9,7 @@ typedef struct vertice{
     int rotulo;
     int grau;
     Adja* adjacentes;
+    
 }Vert;
 
 typedef struct grafo {

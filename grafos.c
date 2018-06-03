@@ -5,8 +5,8 @@
 
 Grafo iniciaGrafo(int vertices) {
     Grafo novo; //(Grafo*)malloc(sizeof(Grafo));
-    novo.vertices = (Vert*)malloc(sizeof(Vert)*vertices);
-    for (int i=0;i<vertices+1;i++){
+    novo.vertices = (Vert*) malloc (sizeof(Vert)*vertices);
+    for (int i=0;i < vertices+1 ; i++){
         addVert(&novo,i);
     }
     novo.n=vertices;
@@ -33,15 +33,17 @@ void imprime(Grafo* a){
     }
 }
 Adja* addAdja(Adja* adjacen,int peso,int v2){
+    Adja teste;
+    Adja* novo = (Adja*) malloc(sizeof(Adja));
     
-    Adja* novo=(Adja*)malloc(sizeof(Adja));   
     novo->peso=peso;  
     novo->v2 = v2;   
     novo->prox=adjacen;
     
     return novo;
 }
-void addAres(Grafo* grafo, int peso,int v1, int v2){           
+void addAres(Grafo* grafo, int peso,int v1, int v2){
+           
             grafo->vertices[v1].adjacentes=addAdja(grafo->vertices[v1].adjacentes,peso,v2);
             grafo->vertices[v1].grau++;
             //grafo->vertices[v2].adjacentes=addAdja(grafo->vertices[v2].adjacentes,peso,v1);  
