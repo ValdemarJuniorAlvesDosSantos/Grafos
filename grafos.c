@@ -6,10 +6,7 @@
 Grafo iniciaGrafo(int vertices) {
     int i=1;
     Grafo novo;
-    if (vertices<1000){
-        i=2;
-    }
-    novo.vertices = (Vert*) malloc (sizeof(Vert) * vertices* i);
+    novo.vertices = (Vert*) malloc (sizeof(Vert) * (vertices+1));
     for (int i=0;i < vertices+1 ; i++){
         addVert(&novo,i);
     }

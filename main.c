@@ -48,7 +48,7 @@ Grafo ReadData(char* arq)
                 fscanf(arquivo,"%s %d",letter,&a);
                 printf("%d\n",a);
                 grafo=iniciaGrafo(a);
-                printf("deboa\n");
+                
             }
 
         }
@@ -60,7 +60,8 @@ Grafo ReadData(char* arq)
 void FloydCanonica(int** matriz, int n, int** pred){
 	for(int k = 1; k < n; k++){
 		for(int i = 1; i < n; i++){
-			for(int j = 1; j< n; j++){                            
+                    
+			for(int j = 1; j< n; j++){
 				if( matriz[i][j] > (matriz[i][k] + matriz[k][j]) ){
 					matriz[i][j] = matriz[i][k] + matriz[k][j];                                        
                                         pred[i][j] = k;
@@ -92,7 +93,7 @@ int main(int argc, char** argv) {
 
     FILE* arquivo();
     Grafo g = ReadData("Teste.txt"); 
-    imprime(&g);
+
 
     int **a=(int**)malloc(sizeof(int*) * g.n+1);
     
@@ -106,14 +107,13 @@ int main(int argc, char** argv) {
         pred[i]=(int*)malloc(sizeof(int) * g.n+1);
     }
     
-    printf("true da true");
     for (int i=1;i<g.n+1;i++){
         
         for (int k=1;k<g.n+1;k++){          
             a[i][k] = custo(&g,i,k);
-            printf ("de %d para %d custo %d \n" ,i,k,a[i][k]);
+            //printf ("de %d para %d custo %d \n" ,i,k,a[i][k]);
         }       
-        printf("\n");
+       // printf("\n");
     }
     
     for (int i=1;i<g.n+1;i++){
