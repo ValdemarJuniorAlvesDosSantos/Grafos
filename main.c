@@ -92,7 +92,7 @@ void imprimeCaminho(int** pred,int origem ,int destino,int n){
 int main(int argc, char** argv) {
 
     FILE* arquivo();
-    Grafo g = ReadData("Teste.txt"); 
+    Grafo g = ReadData("rome99.gr"); 
 
 
     int **a=(int**)malloc(sizeof(int*) * g.n+1);
