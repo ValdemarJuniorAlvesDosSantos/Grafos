@@ -62,3 +62,25 @@ int custo(Grafo* grafo,int v1,int v2){
     }
     return 200000;
 }
+Adja* liberaUltimo(Adja* lista){
+     Adja* aux=lista;
+     if (aux==NULL){
+         return NULL;
+     }
+    while(aux->prox!=NULL){
+        aux=aux->prox;
+    }
+    free (aux);
+}
+void libera(Adja* lista){
+    while (lista!=NULL){
+        liberaUltimo(lista);
+    }
+}
+
+void destroiGrafo(Grafo* grafo){
+    for (int i=0; i < grafo->n+1;i++){
+        //libera(grafo->vertices[i].adjacentes);
+    }
+    //free(grafo);
+}

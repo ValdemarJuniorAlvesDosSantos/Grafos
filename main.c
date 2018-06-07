@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "grafos.h"
-
+#include <time.h>
 Grafo ReadData(char* arq)
 {
     FILE * arquivo;
@@ -90,35 +90,30 @@ void imprimeCaminho(int** pred,int origem ,int destino,int n){
     }
 }
 int main(int argc, char** argv) {
-
+    time_t comeco = time(&comeco);
     FILE* arquivo();
     Grafo g = ReadData("rome99.gr"); 
-
-
-    int **a=(int**)malloc(sizeof(int*) * g.n+1);
-    
+    int n=g.n;
+    int **a=(int**)malloc(sizeof(int*) * n+1);
     for (int i=0;i<g.n+1;i++){
-        a[i]=(int*)malloc(sizeof(int) * g.n+1);
+        a[i]=(int*)malloc(sizeof(int) * n+1);
+    }      
+    int **pred=(int**)malloc(sizeof(int*) * n+1);
+    
+    for (int i=0;i<n+1;i++){
+        pred[i]=(int*)malloc(sizeof(int) * n+1);
     }
     
-    int **pred=(int**)malloc(sizeof(int*) * g.n+1);
-    
-    for (int i=0;i<g.n+1;i++){
-        pred[i]=(int*)malloc(sizeof(int) * g.n+1);
-    }
-    
-    for (int i=1;i<g.n+1;i++){
-        
-        for (int k=1;k<g.n+1;k++){          
+    for (int i=1;i<n+1;i++){       
+        for (int k=1;k<n+1;k++){          
             a[i][k] = custo(&g,i,k);
-            //printf ("de %d para %d custo %d \n" ,i,k,a[i][k]);
         }       
-       // printf("\n");
+
     }
-    
-    for (int i=1;i<g.n+1;i++){
+    destroiGrafo(&g);
+    for (int i=1;i<n+1;i++){
         
-        for (int k=1;k<g.n+1;k++){
+        for (int k=1;k<n+1;k++){
             if (k==i){
                 pred[i][k] = i;
             }else{
@@ -130,36 +125,22 @@ int main(int argc, char** argv) {
     
     
     
-    FloydCanonica(a,g.n+1,pred);
+    time_t tCanon;
+    time(&tCanon);
+    FloydCanonica(a,n+1,pred);
+   
+    //imprimeCaminho(pred,1,5,n);
     
-    printf("Depois do algoritmo\n");
-    for (int i=1;i<g.n+1;i++){
-        
-        for (int k=1;k<g.n+1;k++){                   
-            printf ("de %d para %d custo %d \n" ,i,k,a[i][k]);
-        }       
-        printf("\n");
-    }
-    
-    //printf("Caminho 1 para 6");
-    for (int i=1;i<g.n+1;i++){
-        for (int j=1;j<g.n+1;j++){
-            printf(" -> %d",pred[i][j]);
-        }
-        printf("\n");
-    }
-    
-    for (int i=1;i<g.n+1;i++){
+    for (int i=1;i<n+1;i++){
          free(a[i]);
     }
     free(a);
-    imprimeCaminho(pred,1,5,9);
-    
-    for (int i=1;i<g.n+1;i++){
+    for (int i=1;i<n+1;i++){
          free(pred[i]);
     }
     free(pred);
-    
+    time_t fim = time(&fim);
+    printf("tempo total: %f\n Tempo FroydCanonica: %f\n",difftime(fim,comeco),difftime(fim,tCanon));
     return (EXIT_SUCCESS);
 }
 

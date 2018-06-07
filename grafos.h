@@ -17,12 +17,11 @@ typedef struct grafo {
     int n;
 }Grafo;
 
-//inicia grafo
 Grafo iniciaGrafo(int vertices);
-//adiciona itens no grafo
+
 void addVert(Grafo* grafo,int i);
 void addAres(Grafo* grafo, int peso,int v1, int v2);
 int custo(Grafo* grafo,int v1,int v2);
-// Grafo* destroiGrafo();
+void destroiGrafo(Grafo* grafo);
 
 void imprime(Grafo* a);
