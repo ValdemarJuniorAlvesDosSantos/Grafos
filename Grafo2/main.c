@@ -59,8 +59,7 @@ Grafo ReadData(char* arq)
 
 void FloydCanonica(int** matriz, int n, int** pred){
 	for(int k = 1; k < n; k++){
-		for(int i = 1; i < n; i++){
-                    
+		for(int i = 1; i < n; i++){                    
 			for(int j = 1; j< n; j++){
 				if( matriz[i][j] > (matriz[i][k] + matriz[k][j]) ){
 					matriz[i][j] = matriz[i][k] + matriz[k][j];                                        
@@ -70,9 +69,19 @@ void FloydCanonica(int** matriz, int n, int** pred){
 		}
 	}
 }
-
+void FloydPseudoCanonica(int* matriz, int n, int** pred){
+    for(int k = 1; k < n; k++){
+            for(int i = 1; i < n; i++){                    
+                    for(int j = 1; j< n; j++){
+                            if( matriz[(i*n)+ j] > (matriz[(i*n)+ k] + matriz[(k*n)+j]) ){
+                                matriz[(i*n)+ j] = matriz[(i*n)+ k] + matriz[(k*n)+j];                                        
+                                pred[i][j] = k;
+                            }
+                    }
+            }
+    }
+}
 void imprimeCaminho(int** pred,int origem ,int destino,int n){
-    //printf("%d->",&origem);
     int i=destino;
     int a=0;
     int cam[n];
@@ -95,10 +104,8 @@ int main(int argc, char** argv) {
     FILE* arquivo();
     Grafo g = ReadData("rome99.gr"); 
     int n=g.n;
-    int **a=(int**)malloc(sizeof(int*) * n+1);
-    for (int i=0;i<g.n+1;i++){
-        a[i]=(int*)malloc(sizeof(int) * n+1);
-    }      
+    int *a=(int*)malloc(sizeof(int)* (n+1)*(n+1));
+    
     int **pred=(int**)malloc(sizeof(int*) * n+1);
     
     for (int i=0;i<n+1;i++){
@@ -107,7 +114,7 @@ int main(int argc, char** argv) {
     
     for (int i=1;i<n+1;i++){       
         for (int k=1;k<n+1;k++){          
-            a[i][k] = custo(&g,i,k);
+            a[(i*(n+1))+ k] = custo(&g,i,k);
         }       
 
     }
@@ -128,20 +135,16 @@ int main(int argc, char** argv) {
     
     time_t tCanon;
     time(&tCanon);
-    FloydCanonica(a,n+1,pred);
-   
+    FloydPseudoCanonica( a, n+1,  pred);
     imprimeCaminho(pred,1,5,n);
-    
-    for (int i=1;i<n+1;i++){
-         free(a[i]);
-    }
+
     free(a);
     for (int i=1;i<n+1;i++){
          free(pred[i]);
     }
     free(pred);
     time_t fim = time(&fim);
-    printf("tempo total: %f\n Tempo FroydCanonica: %f\n",difftime(fim,comeco),difftime(fim,tCanon));
+    printf("tempo total: %f\n Tempo FroydPseudoCanonica: %f\n",difftime(fim,comeco),difftime(fim,tCanon));
     return (EXIT_SUCCESS);
 }
 
