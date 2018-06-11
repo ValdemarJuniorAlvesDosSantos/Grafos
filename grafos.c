@@ -45,7 +45,8 @@ Adja* addAdja(Adja* adjacen,int peso,int v2){
 void addAres(Grafo* grafo, int peso,int v1, int v2){
             grafo->vertices[v1].adjacentes=addAdja(grafo->vertices[v1].adjacentes,peso,v2);
             grafo->vertices[v1].grau++;
-            //grafo->vertices[v2].adjacentes=addAdja(grafo->vertices[v2].adjacentes,peso,v1);  
+            grafo->vertices[v2].adjacentes=addAdja(grafo->vertices[v2].adjacentes,peso,v1);
+            grafo->vertices[v1].grau++;
 }
 
 int custo(Grafo* grafo,int v1,int v2){

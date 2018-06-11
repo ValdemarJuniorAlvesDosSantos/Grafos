@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   main.c
  * Author: vj-estudos
  *
@@ -33,13 +33,13 @@ Grafo ReadData(char* arq)
             if(strcmp(letter,"a")==0)
             {
                 int v1,v2,peso;
-                
+
                fscanf(arquivo,"%d %d %d",&v1,&v2,&peso);
-               
-               
+
+
                addAres(&grafo, peso, v1, v2);
-               
-            
+
+
 
             }
             else if(strcmp(letter,"p")==0)
@@ -48,7 +48,7 @@ Grafo ReadData(char* arq)
                 fscanf(arquivo,"%s %d",letter,&a);
                 printf("%d\n",a);
                 grafo=iniciaGrafo(a);
-                
+
             }
 
         }
@@ -59,34 +59,34 @@ Grafo ReadData(char* arq)
 
 void FloydCanonica(int** matriz, int n, int** pred){
 	for(int k = 1; k < n; k++){
-		for(int i = 1; i < n; i++){                    
+		for(int i = 1; i < n; i++){
 			for(int j = 1; j< n; j++){
 				if( matriz[i][j] > (matriz[i][k] + matriz[k][j]) ){
-					matriz[i][j] = matriz[i][k] + matriz[k][j];                                        
-                                        pred[i][j] = k;
-                                }
-  			}
+					    matriz[i][j] = matriz[i][k] + matriz[k][j];
+              pred[i][j] = k;
+        }
+  		}
 		}
 	}
 }
 void FloydPseudoCanonica(int* matriz, int n, int** pred){
-    for(int k = 1; k < n; k++){
-            for(int i = 1; i < n; i++){                    
-                    for(int j = 1; j< n; j++){
-                            if( matriz[(i*n)+ j] > (matriz[(i*n)+ k] + matriz[(k*n)+j]) ){
-                                matriz[(i*n)+ j] = matriz[(i*n)+ k] + matriz[(k*n)+j];                                        
-                                pred[i][j] = k;
-                            }
-                    }
-            }
+  for(int k = 1; k < n; k++){
+    for(int i = 1; i < n; i++){
+      for(int j = 1; j< n; j++){
+          if( matriz[(i*n)+ j] > (matriz[(i*n)+ k] + matriz[(k*n)+j])){
+              matriz[(i*n)+ j] = matriz[(i*n)+ k] + matriz[(k*n)+j];
+              pred[i][j] = k;
+          }
+      }
     }
+  }
 }
 void imprimeCaminho(int** pred,int origem ,int destino,int n){
     int i=destino;
     int a=0;
     int cam[n];
     cam[0]=destino;
-    
+
     while (i!=0){
         i = pred[origem][i];
         a++;
@@ -102,50 +102,56 @@ void imprimeCaminho(int** pred,int origem ,int destino,int n){
 int main(int argc, char** argv) {
     time_t comeco = time(&comeco);
     FILE* arquivo();
-    Grafo g = ReadData("rome99.gr"); 
+    Grafo g = ReadData(argv[1]);
     int n=g.n;
     int *a=(int*)malloc(sizeof(int)* (n+1)*(n+1));
-    
-    int **pred=(int**)malloc(sizeof(int*) * n+1);
-    
-    for (int i=0;i<n+1;i++){
-        pred[i]=(int*)malloc(sizeof(int) * n+1);
-    }
-    
-    for (int i=1;i<n+1;i++){       
-        for (int k=1;k<n+1;k++){          
+
+
+
+    for (int i=1;i<n+1;i++){
+        for (int k=1;k<n+1;k++){
             a[(i*(n+1))+ k] = custo(&g,i,k);
-        }       
+        }
 
     }
     destroiGrafo(&g);
+    int **pred=(int**)malloc(sizeof(int*) * n+1);
+
+    for (int i=0;i<n+1;i++){
+        pred[i]=(int*)malloc(sizeof(int) * n+1);
+    }
     for (int i=1;i<n+1;i++){
-        
+
         for (int k=1;k<n+1;k++){
             if (k==i){
                 pred[i][k] = i;
             }else{
                 pred[i][k] = 0;
             }
-        }       
-     
+        }
+
     }
-    
-    
-    
+
+
+
     time_t tCanon;
     time(&tCanon);
     FloydPseudoCanonica( a, n+1,  pred);
-    imprimeCaminho(pred,1,5,n);
+    time_t fim;
+    time(&fim);
 
     free(a);
     for (int i=1;i<n+1;i++){
          free(pred[i]);
     }
     free(pred);
-    time_t fim = time(&fim);
-    printf("tempo total: %f\n Tempo FroydPseudoCanonica: %f\n",difftime(fim,comeco),difftime(fim,tCanon));
+
+    float tempo=difftime(fim,tCanon);
+    printf("Tempo FroydVetor: %f\n",difftime(fim,comeco));
+
+    FILE* saida=fopen("saida2.txt","a");
+    fprintf(saida,"%d %.1f\n", n ,tempo);
+    fclose(saida);
+
     return (EXIT_SUCCESS);
 }
-
-

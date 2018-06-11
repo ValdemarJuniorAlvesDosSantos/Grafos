@@ -93,17 +93,13 @@ void imprimeCaminho(int** pred,int origem ,int destino,int n){
 int main(int argc, char** argv) {
     time_t comeco = time(&comeco);
     FILE* arquivo();
-    Grafo g = ReadData("rome99.gr"); 
+    Grafo g = ReadData(argv[1]); 
     int n=g.n;
     int **a=(int**)malloc(sizeof(int*) * n+1);
     for (int i=0;i<g.n+1;i++){
         a[i]=(int*)malloc(sizeof(int) * n+1);
     }      
-    int **pred=(int**)malloc(sizeof(int*) * n+1);
-    
-    for (int i=0;i<n+1;i++){
-        pred[i]=(int*)malloc(sizeof(int) * n+1);
-    }
+   
     
     for (int i=1;i<n+1;i++){       
         for (int k=1;k<n+1;k++){          
@@ -112,6 +108,11 @@ int main(int argc, char** argv) {
 
     }
     destroiGrafo(&g);
+   int **pred=(int**)malloc(sizeof(int*) * n+1);
+    
+    for (int i=0;i<n+1;i++){
+        pred[i]=(int*)malloc(sizeof(int) * n+1);
+    }
     for (int i=1;i<n+1;i++){
         
         for (int k=1;k<n+1;k++){
@@ -129,8 +130,9 @@ int main(int argc, char** argv) {
     time_t tCanon;
     time(&tCanon);
     FloydCanonica(a,n+1,pred);
-   
-    imprimeCaminho(pred,1,5,n);
+    time_t fim;
+    time(&fim);
+ 
     
     for (int i=1;i<n+1;i++){
          free(a[i]);
@@ -140,8 +142,14 @@ int main(int argc, char** argv) {
          free(pred[i]);
     }
     free(pred);
-    time_t fim = time(&fim);
-    printf("tempo total: %f\n Tempo FroydCanonica: %f\n",difftime(fim,comeco),difftime(fim,tCanon));
+    
+    float tempo=difftime(fim,tCanon);
+    printf("Tempo FroydCanonica: %f\n",difftime(fim,comeco));
+    
+    FILE* saida=fopen("saidaCanonica.txt","a");
+    fprintf(saida,"%d %.1f\n", n ,tempo);
+    fclose(saida);
+    
     return (EXIT_SUCCESS);
 }
 
